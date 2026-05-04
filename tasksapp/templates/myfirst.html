@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'tasksapp/css/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <nav class="navbar">
+        <a href="{% url 'tasksapp' %}" class="navbar-brand">TaskMaster</a>
+        <div class="navbar-nav">
+            <a href="{% url 'tasksapp' %}" class="nav-link active">Dashboard</a>
+            <span class="nav-link">Welcome!</span>
+        </div>
+    </nav>
+
+    <div class="dashboard-content">
+        <div class="dashboard-header" style="text-align: left;">
+            <h1 style="font-size: 2rem;">Overview</h1>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Manage your tasks and deadlines</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card" style="margin-bottom: 0;">
+                <h2 style="margin-bottom: 1.5rem;">Your Tasks</h2>
+                <div class="table-responsive">
+                    <table class="task-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Due Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                                <tr>
+                                    <td><strong>{{ task.name }}</strong></td>
+                                    <td>{{ task.description }}</td>
+                                    <td>
+                                        <span class="status-badge {% if task.status == 'completed' %}completed{% endif %}">
+                                            {{ task.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ task.due_date|date:"M d, Y"|default:"-" }}</td>
+                                    <td>
+                                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                            <a href="{% url 'edit_task' task.id %}" class="btn btn-edit" style="padding: 0.25rem 0.5rem;">Edit</a>
+                                            <a href="{% url 'delete_task' task.id %}" class="btn btn-danger" style="padding: 0.25rem 0.5rem;">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="empty-state">
+                                            No tasks yet. Create one on the right!
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 0; align-self: start;">
+                <h2 style="margin-bottom: 1.5rem;">Add New Task</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Add Task</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

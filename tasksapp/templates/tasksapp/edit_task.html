@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'tasksapp/css/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <nav class="navbar">
+        <a href="{% url 'tasksapp' %}" class="navbar-brand">TaskMaster</a>
+        <div class="navbar-nav">
+            <a href="{% url 'tasksapp' %}" class="nav-link">Dashboard</a>
+            <span class="nav-link">Welcome!</span>
+        </div>
+    </nav>
+
+    <div class="dashboard-content" style="max-width: 600px;">
+        <div class="dashboard-header" style="text-align: left;">
+            <h1 style="font-size: 2rem;">Edit Task</h1>
+        </div>
+
+        <div class="card">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary">Update Task</button>
+                    <a href="{% url 'tasksapp' %}" class="btn" style="background-color: #f1f5f9; color: var(--text-muted);">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
